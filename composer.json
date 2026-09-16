@@ -1,21 +1,52 @@
 {
-    "name": "scandipwa/cache",
-    "description": "ScandiPWA bootstrap module",
+    "name": "selveq/cache",
+    "description": "Magento 2 Cache extension for ScandiPWA theme",
+    "type": "magento2-module",
+    "version": "2.0.0",
     "license": [
         "OSL-3.0"
     ],
+    "authors": [
+        {
+            "name": "Scandiweb",
+            "homepage": "https://scandiweb.com",
+            "role": "Original author"
+        },
+        {
+            "name": "Selveq",
+            "homepage": "https://selveq.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/selveq/cache/issues",
+        "source": "https://github.com/selveq/cache"
+    },
     "require": {
-        "magento/module-graph-ql": "^100.3",
-        "magento/module-catalog": "*",
-        "magento/framework": "*",
-        "scandipwa/persisted-query": "^3"
+        "php": "^8.3",
+        "magento/framework": "^103.0",
+        "magento/module-graph-ql": "^100.4",
+        "magento/module-graph-ql-cache": "^100.4",
+        "magento/module-catalog": "^104.0",
+        "magento/module-cms": "^104.0",
+        "magento/module-page-cache": "^100.4",
+        "selveq/persisted-query": "^4.0"
+    },
+    "replace": {
+        "scandipwa/cache": "*"
     },
     "autoload": {
         "files": [
             "src/registration.php"
         ],
         "psr-4": {
-            "ScandiPWA\\Cache\\": "src"
+            "ScandiPWA\\Cache\\": "src/"
         }
+    },
+    "archive": {
+        "exclude": [
+            "/.github",
+            "/.gitignore"
+        ]
     }
 }

@@ -1,57 +1,57 @@
 <?php
+
 /**
- * ScandiPWA_Cache
- *
  * @category    ScandiPWA
  * @package     ScandiPWA_Cache
- * @author      Ilja Lapkovskis <ilja@scandiweb.com | info@scandiweb.com>
- * @copyright   Copyright (c) 2019 Scandiweb, Ltd (https://scandiweb.com)
+ * @copyright   Copyright © 2019 Scandiweb, Ltd (https://scandiweb.com)
+ * @copyright   Modifications © Selveq. All rights reserved.
+ * @license     OSL-3.0 (Open Software License ("OSL") v. 3.0)
+ * See LICENSE for license details.
  */
 
 namespace ScandiPWA\Cache\Model;
 
-class Cache implements CacheInterface
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Cache implements CacheInterface, ResetAfterRequestInterface
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $identities = [];
-    
+
     /**
-     * @inheritDoc
-     */
-    public function addIdentity(string $name, int $id): self
-    {
-        $identity  = $name . '_' . $id;
-        if (!in_array($identity, $this->identities)) {
-            $this->identities[] = $identity;
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addIdentities(array $identities): array
     {
         $merged = array_merge($this->identities, $identities);
-        return $this->identities = array_unique($merged);
+
+        // array_unique keeps the original keys, and the tag header is the only consumer of the order
+        return $this->identities = array_values(array_unique($merged));
     }
-    
+
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIdentities(): array
     {
         return $this->identities;
     }
-    
+
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function identitiesExist(): bool
     {
         return (bool)count($this->identities);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function _resetState(): void
+    {
+        $this->identities = [];
     }
 }

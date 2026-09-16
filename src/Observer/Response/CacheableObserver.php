@@ -1,52 +1,37 @@
 <?php
+
 /**
- * ScandiPWA_Cache
- *
  * @category    ScandiPWA
  * @package     ScandiPWA_Cache
- * @author      Ilja Lapkovskis <ilja@scandiweb.com | info@scandiweb.com>
- * @copyright   Copyright (c) 2019 Scandiweb, Ltd (https://scandiweb.com)
+ * @copyright   Copyright © 2019 Scandiweb, Ltd (https://scandiweb.com)
+ * @copyright   Modifications © Selveq. All rights reserved.
+ * @license     OSL-3.0 (Open Software License ("OSL") v. 3.0)
+ * See LICENSE for license details.
  */
 
 namespace ScandiPWA\Cache\Observer\Response;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ObserverInterface;
-use ScandiPWA\Cache\Model\Cache;
+use ScandiPWA\Cache\Model\CacheInterface;
 
 abstract class CacheableObserver implements ObserverInterface
 {
     /**
-     * @var Cache
-     */
-    protected $cache;
-    
-    /**
-     * @var Http
-     */
-    protected $request;
-    
-    /**
-     * @var bool
-     */
-    protected $isGraphQl;
-    
-    /**
-     * @var bool
-     */
-    protected $isCacheable;
-    
-    /**
-     * CacheableObserver constructor.
-     * @param Cache $cache
+     * @param CacheInterface $cache
+     * @param Http $request
      */
     public function __construct(
-        Cache $cache,
-        Http $request
-    ) {
-        $this->cache = $cache;
-        $this->request = $request;
-        $this->isGraphQl = $this->request->getPathInfo() === '/graphql';
-        $this->isCacheable = array_key_exists('hash', $this->request->getParams());
+        protected readonly CacheInterface $cache,
+        protected readonly Http $request
+    ) {}
+
+    /**
+     * @return bool
+     */
+    protected function isTaggableRequest(): bool
+    {
+        return $this->request->getFrontName() === 'graphql'
+            && array_key_exists('hash', $this->request->getParams());
     }
 }
