@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- A `graphql-no-such-entity` error keeps the status core set, like every other error, so a query that only asked for a missing entity, such as a disabled category's breadcrumbs, answers with its error instead of a 404.
+
 ## 2.0.1
 
 - A GraphQL object with keys counts as data, so a category `urlResolver` answering `{sku: null, type: CATEGORY, id: 6}` no longer makes the whole response a 404. The first-element rule applies to lists only.

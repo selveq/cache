@@ -5,7 +5,7 @@ Fork of [scandipwa/cache](https://github.com/scandipwa/cache) 1.1.5, maintained 
 ## What it does
 
 - Emits one `X-Magento-Tags` header per persisted query, from the identities of every entity the request loaded and from core's per-resolver cache identities.
-- Answers `404` with `max-age=0` when a query resolved nothing, so an empty answer is never cached.
+- Answers `404` with `max-age=0` when a query resolved nothing and reported no error, so an empty answer is never cached.
 - Emits no tags when a resolver declares the query uncacheable.
 - Purges Varnish on CMS page, CMS block, menu and menu item saves.
 

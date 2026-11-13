@@ -21,9 +21,6 @@ use ScandiPWA\PersistedQuery\Plugin\PersistedQuery;
 
 class Add404CodeToEmptyResponsePlugin
 {
-    // the one error category that means the route is missing rather than the request being wrong
-    private const CATEGORY_NOT_FOUND = 'graphql-no-such-entity';
-
     /**
      * @param Json $json
      */
@@ -66,7 +63,7 @@ class Add404CodeToEmptyResponsePlugin
     }
 
     /**
-     * set 404 on a response that resolved nothing because the entity is missing.
+     * set 404 on an error free response that resolved nothing.
      * @param HttpInterface $response
      * @return HttpInterface
      */
@@ -97,8 +94,8 @@ class Add404CodeToEmptyResponsePlugin
             return $response;
         }
 
-        // a validation or authorisation error is a bad request, not a missing route, so core's status stands
-        if (array_key_exists('errors', $responseContent) && !$this->isNotFound($responseContent)) {
+        // any error keeps core's status: a missing entity inside a query is not a missing route
+        if (array_key_exists('errors', $responseContent)) {
             return $response;
         }
 
@@ -167,27 +164,5 @@ class Add404CodeToEmptyResponsePlugin
         $first = current($field);
 
         return $first === null || (is_array($first) && !$first);
-    }
-
-    /**
-     * whether every error reports a missing entity, which is the only error shape that maps to 404.
-     * @param array $responseContent
-     * @return bool
-     */
-    private function isNotFound(array $responseContent): bool
-    {
-        $errors = $responseContent['errors'] ?? null;
-
-        if (!is_array($errors) || !$errors) {
-            return false;
-        }
-
-        foreach ($errors as $error) {
-            if (!is_array($error) || ($error['extensions']['category'] ?? null) !== self::CATEGORY_NOT_FOUND) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
