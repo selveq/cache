@@ -141,7 +141,7 @@ class Add404CodeToEmptyResponsePlugin
     }
 
     /**
-     * upstream's notion of empty: null, an empty array, or an array whose first element is either.
+     * empty: null, an empty array, or a list whose first element is either; an object with keys is data.
      * @param mixed $field
      * @return bool
      */
@@ -157,6 +157,11 @@ class Add404CodeToEmptyResponsePlugin
 
         if (!$field) {
             return true;
+        }
+
+        // an object (urlResolver, route, cmsPage...) with keys is data; the first-null rule is for lists only
+        if (!array_is_list($field)) {
+            return false;
         }
 
         $first = current($field);

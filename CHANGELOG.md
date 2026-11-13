@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- A GraphQL object with keys counts as data, so a category `urlResolver` answering `{sku: null, type: CATEGORY, id: 6}` no longer makes the whole response a 404. The first-element rule applies to lists only.
+
 ## 2.0.0
 
 Forked from `scandipwa/cache` 1.1.5. Module name and namespace are unchanged, and the package replaces `scandipwa/cache` at every version, so it installs as a drop-in replacement.
